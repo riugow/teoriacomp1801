@@ -5,4 +5,4 @@ Programas prontos:
 * Máquina Norma: 1a, 1b, 1c, 1d, 1e
 
 Programas em andamento: 
-* Máquina Norma: 2a (Hugo), 2?(Holtz)
+* Máquina Norma: 2a (Hugo)
