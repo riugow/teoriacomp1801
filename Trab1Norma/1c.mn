@@ -1,0 +1,14 @@
+// 1.c) f(x) retorna o número de 1’s na representação binária de x. Por
+//      exemplo, f(2) = 1, f(6) = 2, f(11) = 3 e f(15) = 4.
+main{
+   1: if zero X then goto 7 else goto 2
+   2: do dec X goto 3
+   3: if zero X then goto 6 else goto 4
+   4: do dec X goto 5
+   5: do inc A goto 1
+   6: do inc Y goto 7
+   7: if zero A then goto 0 else goto 8
+   8: do dec A goto 9
+   9: do inc X goto 10
+   10: if zero A then goto 1 else goto 8
+}

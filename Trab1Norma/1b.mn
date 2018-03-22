@@ -1,0 +1,48 @@
+// limpa registrador
+operation zera(R){
+   1: if zero R then goto 0 else goto 2
+   2: do dec R goto 1
+}
+
+//soma A=A+B, zerando B
+operation soma(M,N){
+   1: if zero N then goto 0 else goto 2
+   2: do dec N goto 3
+   3: do inc M goto 1
+}
+
+//atribui o valor de B para A
+operation atribui(I,J){
+   1: do zera(I) goto 2
+   2: if zero J then goto 6 else goto 3
+   3: do dec J goto 4
+   4: do inc K goto 5
+   5: do inc I goto 2
+   6: do soma(J,K) goto 0
+}
+
+//soma C vezes o valor de B, armazenando em B
+operation multiplica(B, C){
+   1: do atribui(D,B) goto 2
+   2: do atribui(E,C) goto 3
+   3: do dec E goto 4
+   4: if zero E then goto 0 else goto 5
+   5: do atribui(F,D) goto 6
+   6: do soma(B,F) goto 3
+}
+
+//calcula o fatorial de A
+operation fatorial(H,R){
+   1: if zero H then goto 2 else goto 3
+   2: do inc H goto 3
+   3: if zero R then goto 0 else goto 4
+   4: do multiplica(H,R) goto 5
+   5: do dec R goto 1
+}
+
+// 1.b) f(x) = x!, ou seja, f(x) é a função que retorna o fatorial de x.
+//      Sabemos que f(x) pode ser definida recursivamente como f(x) = 1 se
+//      x = 0 e f(x) = x*f(x – 1) se x > 0.
+main{
+   1: do fatorial(Y, X) goto 0
+}

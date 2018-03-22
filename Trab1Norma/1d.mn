@@ -1,0 +1,40 @@
+// limpa registrador
+operation zera(A){
+   1: if zero A then goto 0 else goto 2
+   2: do dec A goto 1
+}
+
+// A:=A+B (soma não-destrutiva)
+operation soma(D,E,F){
+  s1: if zero E then goto s5 else goto s2
+  s2: do dec E goto s3
+  s3: do inc D goto s4
+  s4: do inc F goto s1
+  s5: if zero F then goto 0 else goto s6
+  s6: do dec F goto s7
+  s7: do inc E goto s5
+}
+
+//atribui o valor de B para A
+operation atribui(D,E){
+   1: do zera(D) goto 2
+   2: do zera(F) goto 3
+   3: do soma(D,E,F) goto 0
+}
+
+// 1.d) f(x) retorna o termo de ordem x da sequência de Fibonacci. Para todo
+//      natural x, definimos o termo de ordem x da sequência de Fibonacci, e o
+//      denotamos por ax, da seguinte maneira: a0=0 , a1=1 e ax=ax−1+ax−2 para
+//      todo x ≥ 2. Sendo assim, temos que f(0) = 0, f(1) = 1, f(2) = 1,
+//      f(3) = 2, f(4) = 3 e f(5) = 5.
+main{
+   1: if zero X then goto 0 else goto 2
+   2: do dec X goto 3
+   3: do inc Y goto 4
+   4: if zero X then goto 0 else goto 5
+   5: do dec X goto 6
+   6: do atribui(C,Y) goto 7
+   7: do soma(Y,A,B) goto 8
+   8: do atribui(A,C) goto 9
+   9: if zero X then goto 0 else goto 5
+}
