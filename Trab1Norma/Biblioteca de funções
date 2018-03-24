@@ -1,0 +1,70 @@
+//zera A
+operation clear(A) {
+	1: if zero A then goto 0 else goto 2
+	2: do dec A goto 1
+}
+
+// A = A+B, não zerando B
+operation soma(A,B){
+//K = variavel auxiliar para não perder B
+	1: do clear(K) goto 2
+	2: if zero B then goto 6 else goto 3
+	3: do inc A goto 4
+	4: do dec B goto 5
+	5: do inc K goto 2
+	6: if zero K then goto 0 else goto 7
+	7: do inc B goto 8
+	8: do dec K goto 6
+}
+
+// A=B, copia o valor de B para A sem alterar B
+// K = variavel auxiliar para não perder B
+operation assign(A,B){
+	1: do clear(A) goto 2
+	2: do clear(K) goto 3 
+	3: do inc A goto 4
+	4: do inc K goto 5
+	5: do dec B goto 6
+	6: if zero B then goto 7 else goto 3
+	7: do soma(B,K) goto 0
+}
+
+// A=A-B, sem alterar B
+operation subt(A,B){
+	1: do clear(K) goto 2
+	2: do asssign (K,B) goto 3
+	3: if zero K then goto 0 else goto 4
+	4: do dec A goto 5
+	5: do dec K goto 3
+}
+
+//A= A/B, sem alterar B
+//A= Resultado, B=divisor, C=dividendo/resto, K= auxiliar para não perder B
+operation div(A,B){
+	1: do assign (C,A) goto 2
+	2: do clear (A) goto 3
+	3: do assign (K,B) goto 4
+	4: do dec C goto 5
+	5: do dec K goto 6
+	6: if zero C then goto 0 else goto 7
+	//if true = fim do "resto da divisão"
+	7: if zero K then goto 8 else goto 4
+	8: do inc A goto 3
+}
+//A = A*B sem alterar B
+//multiplicação por somas sucessivas
+operation mult(A,B){
+	1: do clear (K) goto 2
+	2: do clear (L) goto 3
+	3: do assign (K,A) goto 4
+	4: do assign (L,B) goto 5
+	5: do clear (A) goto 6
+	6: if zero L then goto 0 else goto 7
+	7: do soma(A,K) goto 8
+	8: do dec L goto 6
+}
+
+
+
+
+
