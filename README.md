@@ -6,3 +6,13 @@ Programas prontos:
 
 Programas em andamento: 
 * Máquina Norma: 2a (Hugo)
+
+Extras:
+* Foi criado um arquivo separado com funções que executam operações intermediárias dos programas:
+  - clear(A)
+  - soma(A,B)
+  - assign(A,B)
+  - subt(A,B)
+  - div(A,B)
+  - mult(A,B)
+  - pow(O,P)
