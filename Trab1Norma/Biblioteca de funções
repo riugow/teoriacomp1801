@@ -64,7 +64,17 @@ operation mult(A,B){
 	8: do dec L goto 6
 }
 
-
-
+//calcula a potencia O^P
+//usa R
+operation pow(O,P){
+   1: if zero P then goto 2 else goto 4
+   2: do clear (O) goto 3
+   3: do inc O goto 0
+   4: if zero O then goto 0 else goto 5
+   5: do assign (R,O) goto 6
+   6: do dec P goto 7
+   7: do mult (O,R) goto 8
+   8: if cmp P 1 then goto 0 else goto 6
+}
 
 
