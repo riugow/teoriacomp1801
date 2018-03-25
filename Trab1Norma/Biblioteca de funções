@@ -70,4 +70,14 @@ operation pow(O,P){
    8: if cmp P 1 then goto 0 else goto 6
 }
 
-
+//calcula o valor codificado do par (A,B) e o armazena em P
+//usa G
+operation pair (P,A,B){
+   1: do clear (G) goto 2
+   2: do add G 2 goto 3
+   3: do pow (G,A) goto 4
+   4: do clear (P) goto 5
+   5: do add P 3 goto 6
+   6: do pow (P,B) goto 7
+   7: do mult (P,G) goto 0
+}
