@@ -1,5 +1,5 @@
 //A = A*B sem alterar B
-//multiplicaÁ„o por somas sucessivas
+//multiplica√ß√£o por somas sucessivas
 operation mult(A,B){
 	1: do clear (K) goto 2
 	2: do clear (L) goto 3
@@ -12,7 +12,7 @@ operation mult(A,B){
 }
 
 //A= A/B, sem alterar B
-//A= Resultado, B=divisor, C=dividendo/resto, K= auxiliar para n„o perder B
+//A= Resultado, B=divisor, C=dividendo/resto, K= auxiliar para n√£o perder B
 operation div(A,B){
 	1: do assign (C,A) goto 2
 	2: do clear (A) goto 3
@@ -20,12 +20,12 @@ operation div(A,B){
 	4: do dec C goto 5
 	5: do dec K goto 6
 	6: if zero C then goto 0 else goto 7
-	//if true = fim do "resto da divis„o"
+	//if true = fim do "resto da divis√£o"
 	7: if zero K then goto 8 else goto 4
 	8: do inc A goto 3
 }
 
-// A:=A div 2 usando C (divis„o inteira por 2)
+// A:=A div 2 usando C (divis√£o inteira por 2)
 operation div2(A,C){
   1: do load(C,A) goto 2
   2: if zero C then goto 0 else goto 3
@@ -56,7 +56,7 @@ operation fst(A,B,C,D){
   6: do clear(C) goto 0
 }
 
-// A:=A div 3 usando C (divis„o inteira por 3)
+// A:=A div 3 usando C (divis√£o inteira por 3)
 operation div3(A,C){
   1: do load(C,A) goto 2
   2: if zero C then goto 0 else goto 3
@@ -68,7 +68,7 @@ operation div3(A,C){
   8: do inc A goto 2
 }
 
-// A divisivel_por_3 usando C (teste se m˙ltiplo de 3)
+// A divisivel_por_3 usando C (teste se m√∫ltiplo de 3)
 test divBy3(A,C){
   1: do load(C,A) goto 2
   2: if zero C then goto true else goto 3
@@ -93,7 +93,7 @@ operation snd(A,B,C,D){
 }
 
 //teste se A/B tem como resultado um numero inteiro
-//A= Resultado, B=divisor, C=dividendo/resto, K= auxiliar para n„o perder B
+//A= Resultado, B=divisor, C=dividendo/resto, K= auxiliar para n√£o perder B
 test divByB(A,B){
 	1: do assign (C,A) goto 2
 	2: do clear (A) goto 3
@@ -101,7 +101,7 @@ test divByB(A,B){
 	4: do dec C goto 5
 	5: do dec K goto 6
 	6: if zero C then goto 9 else goto 7
-	//if true = fim do "resto da divis„o"
+	//if true = fim do "resto da divis√£o"
 	7: if zero K then goto 8 else goto 4
 	8: do inc A goto 3
 	9: if zero k then goto true else goto false
@@ -131,25 +131,38 @@ operation mdc(A,B,C){
 	5a: do assign (C,CB) goto 0
 	//se resto 0, mdc = penultimo divisor (CB)
 	6a: do assign (CB,C) goto 3a
-	//se resto >0, fazer nova divis„o utilizando o resto
+	//se resto >0, fazer nova divis√£o utilizando o resto
 	2b: do assign(CA,A) goto 3b
 	3b: do rdiv(B,CA,C) goto 4b
 	4b: if zero C then goto 5b else goto 6b
 	5b: do assign (C,CA) goto 0
 	//se resto 0, mdc = penultimo divisor (CA)
 	6b: do assign (CA,C) goto 3b
-	//se resto >0, fazer nova divis„o utilizando o resto
+	//se resto >0, fazer nova divis√£o utilizando o resto
 }
+//calcula a potencia O^P
+//usa R
+operation pow(O,P){
+   1: if zero P then goto 2 else goto 4
+   2: do clear (O) goto 3
+   3: do inc O goto 0
+   4: if zero O then goto 0 else goto 5
+   5: do assign (R,O) goto 6
+   6: do dec P goto 7
+   7: do mult (O,R) goto 8
+   8: if cmp P 1 then goto 0 else goto 6
+}
+
 //calcula o valor codificado do par (A,B) e o armazena em P
 //usa G
-operation pair(P,A,B){
-   1: do zera(G) goto 2
+operation pair (P,A,B){
+   1: do clear (G) goto 2
    2: do add G 2 goto 3
-   3: do potencia(G,A) goto 4
-   4: do zera(P) goto 5
+   3: do pow (G,A) goto 4
+   4: do clear (P) goto 5
    5: do add P 3 goto 6
-   6: do potencia(P,B) goto 7
-   7: do multiplica(P,G) goto 0
+   6: do pow (P,B) goto 7
+   7: do mult (P,G) goto 0
 }
 
 
@@ -166,13 +179,13 @@ main{
 	6: do inc C goto 7
 	//C = 1
 	7: if abDivByC(CA,CB,C) goto 8a else goto 8b
-	//testa se A e B s„o divisiveis por C
+	//testa se A e B s√£o divisiveis por C
 	8a: div(CA,C) goto 9a
 	9a: div(CB,C) goto 7
 	8b: do inc C goto 9b
 	9b: if maiorq(CA,C) then goto 10 else goto 11
 	10: if maiorq(CB,C) then goto 7 else goto 11
-	//testa se CA>=C e CB>=C, se false:termina de reduzir a fraÁ„o
+	//testa se CA>=C e CB>=C, se false:termina de reduzir a fra√ß√£o
 	11: do mult(CA,B) goto 12
 	12: do assign(W,CA) goto 13
 	//armazena mmc de A e B em W
