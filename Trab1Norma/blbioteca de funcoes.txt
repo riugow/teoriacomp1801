@@ -118,7 +118,7 @@ operation div3(A,C){
 
 // A divisivel_por_3 usando C (teste se múltiplo de 3)
 test divBy3(A,C){
-  1: do load(C,A) goto 2
+  1: do assign(C,A) goto 2
   2: if zero C then goto true else goto 3
   3: do dec C goto 4
   4: do inc A goto 5
