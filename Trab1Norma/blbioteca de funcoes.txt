@@ -29,7 +29,7 @@ operation subt(A,B){
 	2: if zero K then goto 0 else goto 3
 	3: do dec A goto 4
 	4: do dec K goto 2
-}
+} 
 
 //teste se A>=B
 test maiorq(A,B){
