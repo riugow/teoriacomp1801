@@ -58,7 +58,7 @@ operation fst(A,B,C,D){
 
 // A:=A div 3 usando C (divisão inteira por 3)
 operation div3(A,C){
-  1: do load(C,A) goto 2
+  1: do assign(C,A) goto 2
   2: if zero C then goto 0 else goto 3
   3: do dec C goto 4
   4: if zero C then goto 0 else goto 5
