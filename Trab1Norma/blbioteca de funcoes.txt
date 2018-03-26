@@ -31,19 +31,28 @@ operation subt(A,B){
 	4: do dec K goto 2
 }
 
+//teste se A>=B
+test maiorq(A,B){
+	1: if zero A then goto 5 else goto 2
+	2: if zero B then goto true else goto 3
+	3: do dec A goto 4
+	4: do dec B goto 1
+	5: if zero B then goto true else goto false
+}
+
 //A= A/B, sem alterar B
 //A= Resultado, B=divisor, C=dividendo/resto, K= auxiliar para não perder B
 operation div(A,B){
 	1: do assign (C,A) goto 2
 	2: do clear (A) goto 3
 	3: do assign (K,B) goto 4
-	4: do dec C goto 5
-	5: do dec K goto 6
+	4: do subt(C,B) goto 5
+	5: do inc A goto 6
 	6: if zero C then goto 0 else goto 7
-	//if true = fim do "resto da divisão"
-	7: if zero K then goto 8 else goto 4
-	8: do inc A goto 3
-}
+	7: if maiorq(C,B) then goto 4 else goto 0
+	}
+
+
 //A = A*B sem alterar B
 //multiplicação por somas sucessivas
 operation mult(A,B){
@@ -161,14 +170,7 @@ test abDivByC(A,B,C){
 	2: if divByB(B,C) then goto true else goto false
 }
 
-//teste se A>=B
-test maiorq(A,B){
-	1: if zero A then goto 5 else goto 2
-	2: if zero B then goto true else goto 3
-	3: do dec A goto 4
-	4: do dec B goto 1
-	5: if zero B then goto true else goto false
-}
+
 //A= A/B, sem alterar B, retornando resto
 //A= Resultado, B=divisor, C=dividendo/resto, K= auxiliar para não perder B
 operation rdiv(A,B,C){
