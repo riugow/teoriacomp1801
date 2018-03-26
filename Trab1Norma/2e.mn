@@ -1,0 +1,131 @@
+// limpa registrador
+operation zera(A){
+   1: if zero A then goto 0 else goto 2
+   2: do dec A goto 1
+}
+
+//soma A=A+B, zerando B
+operation soma(A,B){
+   1: if zero B then goto 0 else goto 2
+   2: do dec B goto 3
+   3: do inc A goto 1
+}
+
+//atribui o valor de B para A
+//usa K
+operation atribui(A,B){
+   1: do zera(A) goto 2
+   2: if zero B then goto 6 else goto 3
+   3: do dec B goto 4
+   4: do inc K goto 5
+   5: do inc A goto 2
+   6: do soma(B,K) goto 0
+}
+
+//soma C vezes o valor de B, armazenando em B
+//usa D, E, F
+operation multiplica(B, C){
+   1: do atribui(D,B) goto 2
+   2: do atribui(E,C) goto 3
+   3: do dec E goto 4
+   4: if zero E then goto 0 else goto 5
+   5: do atribui(F,D) goto 6
+   6: do soma(B,F) goto 3
+}
+
+//divide o valor de A por B
+// Entram A (dividendo) e B (divisor)
+// Saem A (quociente) e B (resto)
+// usa E e F
+operation div(A,B){
+   1: do zera(E) goto 2
+   2: do soma(E,A) goto 3
+   3: do zera(F) goto 4
+   4: do soma(F,B) goto 5
+   5: do atribui(B,F) goto 6
+   6: if zero B then goto 10 else goto 7 
+   7: if zero E then goto 0 else goto 8
+   8: do dec E goto 9
+   9: do dec B goto 6
+  10: do inc A goto 11
+  11: if zero E then goto 0 else goto 5
+} 
+
+//calcula a potencia O^P
+//usa R
+operation potencia(O,P){
+   1: if cmp P 1 then goto 0 else goto 2
+   2: if zero P then goto 3 else goto 5
+   3: do zera(O) goto 4
+   4: do inc O goto 0
+   5: if zero O then goto 0 else goto 6
+   6: do atribui(R,O) goto 7
+   7: do dec P goto 8
+   8: do multiplica(O,R) goto 9
+   9: if cmp P 1 then goto 0 else goto 7
+}
+
+// decodifica a primeira coordenada do número P,
+// sendo P = (2^A)*(3^B)
+operation fst(A,P){
+   1: do zera(A) goto 2
+   2: do atribui(M,P) goto 3
+   3: do zera(N) goto 4
+   4: do add N 2 goto 5
+   5: do div(M,N) goto 6
+   6: if zero N then goto 7 else goto 0
+   7: do inc A goto 4
+}
+
+// decodifica a segunda coordenada do número P,
+// sendo P = (2^A)*(3^B)
+operation snd(B,P){
+   1: do zera(B) goto 2
+   2: do atribui(M,P) goto 3
+   3: do zera(N) goto 4
+   4: do add N 3 goto 5
+   5: do div(M,N) goto 6
+   6: if zero N then goto 7 else goto 0
+   7: do inc B goto 4
+}
+
+// calcula o valor codificado do par (A,B)
+// sendo P = (2^A)*(3^B)
+//usa G
+operation pair(P,A,B){
+   1: do zera(G) goto 2
+   2: do add G 2 goto 3
+   3: do potencia(G,A) goto 4
+   4: do zera(P) goto 5
+   5: do add P 3 goto 6
+   6: do potencia(P,B) goto 7
+   7: do multiplica(P,G) goto 0
+}
+
+//
+// 2.e) f(x, y) retorna y concatenado x, isto é, o número que resulta da
+//      concatenação, nessa ordem, dos dígitos de y com os dígitos de x 
+//      (ignorando zeros à esquerda). Por exemplo, f(12, 38) = 3812,
+//      f(1, 50) = 501 e f(374, 0) = 374.
+
+main{
+   1: do fst(A,X) goto 2   
+   2: if zero A then goto 8 else goto 3
+   3: do atribui(Z,A) goto 4
+// calcula quantos dígitos tem A (copiado para Z)
+// e guarda esta informação em W
+   4: do inc W goto 5
+   5: do zera(B) goto 6
+   6: do add B 10 goto 7
+   7: do div(Z,B) goto 8
+   8: if zero Z then goto 9 else goto 4
+// fim do cálculo de dígitos de A.
+// Agora, calcula 10^W e multiplica esse
+// valor pela segunda coordenada de P.
+   9: do snd(Y,X) goto 10
+  10: do zera(Z) goto 11
+  11: do add Z 10 goto 12
+  12: do potencia(Z,W) goto 13
+  13: do multiplica(Y,Z) goto 14
+  14: do soma(Y,A) goto 0
+}
