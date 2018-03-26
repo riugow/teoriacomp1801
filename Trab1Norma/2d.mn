@@ -1,0 +1,150 @@
+// limpa registrador
+operation zera(A){
+   1: if zero A then goto 0 else goto 2
+   2: do dec A goto 1
+}
+
+//soma A=A+B, zerando B
+operation soma(A,B){
+   1: if zero B then goto 0 else goto 2
+   2: do dec B goto 3
+   3: do inc A goto 1
+}
+
+//subtrai B de A
+operation subtrai(A,B){
+   1: if zero B then goto 0 else goto 2
+   2: do dec B goto 3
+   3: do dec A goto 1
+}
+
+//atribui o valor de B para A
+//usa K
+operation atribui(A,B){
+   1: do zera(A) goto 2
+   2: if zero B then goto 6 else goto 3
+   3: do dec B goto 4
+   4: do inc K goto 5
+   5: do inc A goto 2
+   6: do soma(B,K) goto 0
+}
+
+//soma C vezes o valor de B, armazenando em B
+//usa D, E, F
+operation multiplica(B, C){
+   1: do atribui(D,B) goto 2
+   2: do atribui(E,C) goto 3
+   3: do dec E goto 4
+   4: if zero E then goto 0 else goto 5
+   5: do atribui(F,D) goto 6
+   6: do soma(B,F) goto 3
+}
+
+//divide o valor de A por B
+// Entram A (dividendo) e B (divisor)
+// Saem A (quociente) e B (resto)
+// usa E e F
+operation div(A,B){
+   1: do zera(E) goto 2
+   2: do soma(E,A) goto 3
+   3: do zera(F) goto 4
+   4: do soma(F,B) goto 5
+   5: do atribui(B,F) goto 6
+   6: if zero B then goto 10 else goto 7 
+   7: if zero E then goto 0 else goto 8
+   8: do dec E goto 9
+   9: do dec B goto 6
+  10: do inc A goto 11
+  11: if zero E then goto 0 else goto 5
+} 
+
+//calcula a potencia O^P
+//usa R
+operation potencia(O,P){
+   1: if cmp P 1 then goto 0 else goto 2
+   2: if zero P then goto 3 else goto 5
+   3: do zera(O) goto 4
+   4: do inc O goto 0
+   5: if zero O then goto 0 else goto 6
+   6: do atribui(R,O) goto 7
+   7: do dec P goto 8
+   8: do multiplica(O,R) goto 9
+   9: if cmp P 1 then goto 0 else goto 7
+}
+
+// decodifica a primeira coordenada do número P,
+// sendo P = (2^A)*(3^B)
+operation fst(A,P){
+   1: do zera(A) goto 2
+   2: do atribui(M,P) goto 3
+   3: do zera(N) goto 4
+   4: do add N 2 goto 5
+   5: do div(M,N) goto 6
+   6: if zero N then goto 7 else goto 0
+   7: do inc A goto 4
+}
+
+// decodifica a segunda coordenada do número P,
+// sendo P = (2^A)*(3^B)
+operation snd(B,P){
+   1: do zera(B) goto 2
+   2: do atribui(M,P) goto 3
+   3: do zera(N) goto 4
+   4: do add N 3 goto 5
+   5: do div(M,N) goto 6
+   6: if zero N then goto 7 else goto 0
+   7: do inc B goto 4
+}
+
+// calcula o valor codificado do par (A,B)
+// sendo P = (2^A)*(3^B)
+//usa G
+operation pair(P,A,B){
+   1: do zera(G) goto 2
+   2: do add G 2 goto 3
+   3: do potencia(G,A) goto 4
+   4: do zera(P) goto 5
+   5: do add P 3 goto 6
+   6: do potencia(P,B) goto 7
+   7: do multiplica(P,G) goto 0
+}
+
+//calcula o fatorial de R e guarda em
+//H
+operation fatorial(H,R){
+   1: if zero H then goto 2 else goto 3
+   2: do inc H goto 3
+   3: if zero R then goto 0 else goto 4
+   4: do multiplica(H,R) goto 5
+   5: do dec R goto 3
+}
+
+//
+// 2.d) f(x, y) retorna o coeficiente binomial ( x )
+//                                             ( y )
+//      se y ≤ x. Se y > x, f(x, y) retorna 0. Por exemplo, f(3, 2) = 3,
+//      f(10, 3) = 120 e f(0, 4) = 0. Lembre-se de que, para quaisquer
+//      naturais x e y com y ≤ x, definimos ( x ) =    x!
+//                                          ( y )   y!(x−y)!
+
+
+main{
+//extrai as coordenadas
+   1: do fst(A,X) goto 2   
+   2: do snd(B,X) goto 3
+//verifica se Y<=X, sai caso não seja
+   3: do atribui(M,A) goto 4
+   4: do atribui(N,B) goto 5
+   5: do subtrai(N,M) goto 6
+   6: if zero N then goto 7 else goto 0
+//calcula x!, y! e (x-y)!
+   7: do atribui(M,A) goto 8
+   8: do atribui(N,B) goto 9
+   9: do fatorial(Y,M) goto 10
+  10: do fatorial(H,N) goto 11
+  11: do subtrai(A,B) goto 12
+  12: do fatorial(B,A) goto 13
+// calcula o coeficiente binomial
+  13: do div(Y,B) goto 14
+  14: do div(Y,H) goto 0
+}
