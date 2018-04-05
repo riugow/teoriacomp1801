@@ -1,3 +1,57 @@
+//zera A
+operation clear(A) {
+	1: if zero A then goto 0 else goto 2
+	2: do dec A goto 1
+}
+
+// A = A+B, não zerando B
+operation soma(A,B){
+//K = variavel auxiliar para não perder B
+	1: do clear(K) goto 2
+	2: if zero B then goto 6 else goto 3
+	3: do inc A goto 4
+	4: do dec B goto 5
+	5: do inc K goto 2
+	6: if zero K then goto 0 else goto 7
+	7: do inc B goto 8
+	8: do dec K goto 6
+}
+
+// A=B, copia o valor de B para A sem alterar B
+operation assign(A,B){
+  1: do clear(A) goto 2
+  2: do soma(A,B) goto 0
+}
+
+// A=A-B, sem alterar B
+operation subt(A,B){
+	1: do assign (K,B) goto 2
+	2: if zero K then goto 0 else goto 3
+	3: do dec A goto 4
+	4: do dec K goto 2
+} 
+
+//teste se A>=B
+test maiorq(A,B){
+	1: if zero A then goto 5 else goto 2
+	2: if zero B then goto true else goto 3
+	3: do dec A goto 4
+	4: do dec B goto 1
+	5: if zero B then goto true else goto false
+}
+
+//A= A/B, sem alterar B
+//A= Resultado, B=divisor, C=dividendo/resto, K= auxiliar para não perder B
+operation div(A,B){
+	1: do assign (C,A) goto 2
+	2: do clear (A) goto 3
+	3: do assign (K,B) goto 4
+	4: do subt(C,B) goto 5
+	5: do inc A goto 6
+	6: if zero C then goto 0 else goto 7
+	7: if maiorq(C,B) then goto 4 else goto 0
+	}
+
 //A = A*B sem alterar B
 //multiplicação por somas sucessivas
 operation mult(A,B){
@@ -114,14 +168,6 @@ test abDivByC(A,B,C){
 	2: if divByB(B,C) then goto true else goto false
 }
 
-//teste se A>=B
-test maiorq(A,B){
-	1: if zero A then goto 5 else goto 2
-	2: if zero B then goto true else goto 3
-	3: do dec A goto 4
-	4: do dec B goto 1
-	5: if zero B then goto true else goto false
-}
 operation mdc(A,B,C){
 	//C = resultado
 	1: if maiorq(A,B) then goto 2a else goto 2b
