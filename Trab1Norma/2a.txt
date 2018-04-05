@@ -158,7 +158,7 @@ test divByB(A,B){
 	//if true = fim do "resto da divisão"
 	7: if zero K then goto 8 else goto 4
 	8: do inc A goto 3
-	9: if zero k then goto true else goto false
+	9: if zero K then goto true else goto false
 }
 
 
@@ -219,15 +219,15 @@ main{
 	// extrai o segundo  componente do par
 	3: do assign(CA,A) goto 4
 	// CA = copia de A
-	4: do assing(CB,B) goto 5
+	4: do assign(CB,B) goto 5
 	// CB = copia de B
 	5: do clear (C) goto 6
 	6: do inc C goto 7
 	//C = 1
-	7: if abDivByC(CA,CB,C) goto 8a else goto 8b
+	7: if abDivByC(CA,CB,C) then goto 8a else goto 8b
 	//testa se A e B são divisiveis por C
-	8a: div(CA,C) goto 9a
-	9a: div(CB,C) goto 7
+	8a: do div(CA,C) goto 9a
+	9a: do div(CB,C) goto 7
 	8b: do inc C goto 9b
 	9b: if maiorq(CA,C) then goto 10 else goto 11
 	10: if maiorq(CB,C) then goto 7 else goto 11
@@ -237,11 +237,11 @@ main{
 	//armazena mmc de A e B em W
 	13: do assign(CA,A) goto 14
 	// CA = copia de A
-	14: do assing(CB,B) goto 15
+	14: do assign(CB,B) goto 15
 	// CB = copia de B
 	15: do clear(C) goto 16
 	16: do mdc(A,B,C) goto 17
 	17: do assign(Z,C) goto 18
 	//armazena mdc em Z
- 	18: do pair(Y,W,Z) goto
+ 	18: do pair(Y,W,Z) goto 0
 }
