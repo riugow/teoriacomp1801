@@ -81,7 +81,7 @@ operation div(A,B){
 
 // A:=A div 2 usando C (divisão inteira por 2)
 operation div2(A,C){
-  1: do load(C,A) goto 2
+  1: do assign(C,A) goto 2
   2: if zero C then goto 0 else goto 3
   3: do dec C goto 4
   4: if zero C then goto 0 else goto 5
@@ -91,7 +91,7 @@ operation div2(A,C){
 
 // A divisivel_por_2 usando C (teste se multiplo de 2)
 test divBy2(A,C){
-  1: do load(C,A) goto 2
+  1: do assign(C,A) goto 2
   2: if zero C then goto true else goto 3
   3: do dec C goto 4
   4: do inc A goto 5
@@ -103,7 +103,7 @@ test divBy2(A,C){
 // A:=fst(B) usando C,D (extrai o primeiro componente do par)
 operation fst(A,B,C,D){
   1: do clear(A) goto 2
-  2: do load(C,B,D) goto 3
+  2: do assign(C,B) goto 3
   3: if divBy2(C,D) then goto 4 else goto 6
   4: do div2(C,D) goto 5
   5: do inc A goto 3
@@ -124,7 +124,7 @@ operation div3(A,C){
 
 // A divisivel_por_3 usando C (teste se múltiplo de 3)
 test divBy3(A,C){
-  1: do load(C,A) goto 2
+  1: do assign(C,A) goto 2
   2: if zero C then goto true else goto 3
   3: do dec C goto 4
   4: do inc A goto 5
@@ -139,7 +139,7 @@ test divBy3(A,C){
 // A:=snd(B) usando C,D (extrai o segundo componente do par)
 operation snd(A,B,C,D){
   1: do clear(A) goto 2
-  2: do load(C,B,D) goto 3
+  2: do assign(C,B,D) goto 3
   3: if divBy3(C,D) then goto 4 else goto 6
   4: do div3(C,D) goto 5
   5: do inc A goto 3
