@@ -65,9 +65,9 @@ operation mult(A,B){
 	8: do dec L goto 6
 }
 
-//A= A/B, sem alterar B
+//A= A/B, sem alterar B, retornando resto
 //A= Resultado, B=divisor, C=dividendo/resto, K= auxiliar para não perder B
-operation div(A,B){
+operation rdiv(A,B,C){
 	1: do assign (C,A) goto 2
 	2: do clear (A) goto 3
 	3: do assign (K,B) goto 4
