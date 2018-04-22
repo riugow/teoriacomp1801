@@ -44,6 +44,15 @@ let
 
  -- Combinador de Ponto Fixo
  fix      =  \f. (\x. f (x x)) (\x. f (x x)) ;
+ 
+ -- Funções de Alta Ordem
+ map_rec      = \M f l.if (isEmpty l) empty cons (f (head l)) (M f(tail l)) ;
+ filter_rec   = \M p l.if (isEmpty l) empty (if (p (head l)) (cons (head l) (M (tail l))) (M (tail l))) ;
+ fold_rec     = \M op init l.if (isEmpty l) init op (head l) (M (tail l)) ;
+ 
+ map      = fix map_rec ;
+ filter   = fix filter_rec ;
+ fold     = fix fold_rec ;
 
  -- Funcoes Recursivas
  factrec   =   \M n. if (isZero (pred n)) 1 (mult n (M (pred n))) ;
@@ -53,9 +62,8 @@ let
  f1       =  \x y. add (mult 2 x) y ;
  -- f2 recria o par colocando o antigo 2° elemento em 1° e vice-versa
  f2       =  \p. pair (snd p) (fst p) ;
- -- Sempre soma o 1° elemento da lista com o restante e, quando detecta empty, finaliza a soma com o valor zero
- f3rec    =  \M l. if (isEmpty l) 0 (add (fst l) (M (snd l))) ;
- f3       =  fix f3rec ;
+ -- Soma os elementos da lista entre si, interpretando o elemento 'empty' como 0.
+ f3       = \l.fold add 0 l ;
  -- É necessário realizar um append do resto da lista original com o seu primeiro elemento, seguido do empty
  appendrec =  \M l k. if (isEmpty l) k (cons (head l) (M (tail l) k)) ;
  append   =  fix appendrec ;
@@ -64,6 +72,27 @@ let
  -- Constroi lista com o par de primeiros elementos juntamente com o restante da lista. Se for detectado o empty em alguma das duas listas, termina lista final com um empty também.
  f5rec    =  \M l k. if (isEmpty l) empty (if (isEmpty k) empty (cons (pair (head l) (head k)) (M (tail l) (tail k)))) ;
  f5       =  fix f5rec ;
+ 
+  -- Operacoes Aritmeticas em Codificação Padrão
+ succCP        = \n.(pair false n) ;
+ 
+ -- Teste de Zero em Codificação Padrão
+ isZeroCP      = fst ;
+
+ -- Funções para Pares Ordenados em Codificação Padrão
+ predCP        = snd ;
+
+ -- Segunda questão do Trabalho
+ -- repeatCP repete n vezes a aplicação de f em x, sendo n um número no formato Codificação Padrão
+ repeatCP      = Y (\M n f x.if (isZeroCP n) x (f (M (predCP n) f x ))) ;
+ 
+ -- soma dois números no formato Codificação Padrão. Aproveita a implementação da repeatCP, onde a
+ -- soma consiste na aplicação da função sucessor de y, x vezes.
+ -- exemplo: 
+ -- CP_2          = (pair false (pair false (\x.x))) ;
+ -- CP_5          = (pair false (pair false (pair false (pair false (pair false (\x.x)))))) ;
+ -- addCP CP_2 CP_5 deve retornar (pair false (pair false (pair false (pair false (pair false (pair false (pair false (\x.x))))))))
+ addCP         = \x y.repeatCP x succCP y ;
 
 in
 
