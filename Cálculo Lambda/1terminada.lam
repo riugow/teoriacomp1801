@@ -84,7 +84,7 @@ let
 
  -- Segunda questão do Trabalho
  -- repeatCP repete n vezes a aplicação de f em x, sendo n um número no formato Codificação Padrão
- repeatCP      = Y (\M n f x.if (isZeroCP n) x (f (M (predCP n) f x ))) ;
+ repeatCP      = fix (\M n f x.if (isZeroCP n) x (f (M (predCP n) f x ))) ;
  
  -- soma dois números no formato Codificação Padrão. Aproveita a implementação da repeatCP, onde a
  -- soma consiste na aplicação da função sucessor de y, x vezes.
