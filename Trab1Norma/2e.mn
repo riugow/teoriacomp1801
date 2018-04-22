@@ -37,18 +37,19 @@ operation multiplica(B, C){
 // Entram A (dividendo) e B (divisor)
 // Saem A (quociente) e B (resto)
 // usa E e F
-operation div(A,B){
-   1: do zera(E) goto 2
-   2: do soma(E,A) goto 3
-   3: do zera(F) goto 4
-   4: do soma(F,B) goto 5
-   5: do atribui(B,F) goto 6
-   6: if zero B then goto 10 else goto 7 
-   7: if zero E then goto 0 else goto 8
-   8: do dec E goto 9
-   9: do dec B goto 6
-  10: do inc A goto 11
-  11: if zero E then goto 0 else goto 5
+operation div(A,B){  
+   1: if zero A then goto 0 else goto 2
+   2: if zero B then goto 12 else goto 3
+   3: do zera(I) goto 4
+   4: do soma(I,A) goto 5
+   5: do atribui(J,B) goto 6
+   6: if maior(J,I) then goto 11 else goto 7
+   7: do dec I goto 8
+   8: do dec J goto 9
+   9: if zero J then goto 10 else goto 7
+  10: do inc A goto 5
+  11: do atribui(B,I) goto 0
+  12: do soma(B,A) goto 0
 } 
 
 //calcula a potencia O^P
@@ -107,25 +108,25 @@ operation pair(P,A,B){
 //      concatenação, nessa ordem, dos dígitos de y com os dígitos de x 
 //      (ignorando zeros à esquerda). Por exemplo, f(12, 38) = 3812,
 //      f(1, 50) = 501 e f(374, 0) = 374.
+
 main{
    1: do fst(A,X) goto 2   
-   2: if zero A then goto 3 else goto 4
-   3: do inc W goto 10
-   4: do atribui(Z,A) goto 5
+   2: if zero A then goto 8 else goto 3
+   3: do atribui(Z,A) goto 4
 // calcula quantos dígitos tem A (copiado para Z)
 // e guarda esta informação em W
-   5: do inc W goto 6
-   6: do zera(B) goto 7
-   7: do add B 10 goto 8
-   8: do div(Z,B) goto 9
-   9: if zero Z then goto 10 else goto 5
+   4: do inc W goto 5
+   5: do zera(B) goto 6
+   6: do add B 10 goto 7
+   7: do div(Z,B) goto 8
+   8: if zero Z then goto 9 else goto 4
 // fim do cálculo de dígitos de A.
 // Agora, calcula 10^W e multiplica esse
 // valor pela segunda coordenada de P.
-  10: do snd(Y,X) goto 11
-  11: do zera(Z) goto 12
-  12: do add Z 10 goto 13
-  13: do potencia(Z,W) goto 14
-  14: do multiplica(Y,Z) goto 15
-  15: do soma(Y,A) goto 0
+   9: do snd(Y,X) goto 10
+  10: do zera(Z) goto 11
+  11: do add Z 10 goto 12
+  12: do potencia(Z,W) goto 13
+  13: do multiplica(Y,Z) goto 14
+  14: do soma(Y,A) goto 0
 }

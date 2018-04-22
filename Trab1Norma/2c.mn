@@ -29,6 +29,27 @@ operation atribui(A,B){
    6: do soma(B,K) goto 0
 }
 
+// testa se A > B
+test maior(A,B){
+   1: do atribui(D,A) goto 2
+   2: do atribui(E,B) goto 3
+   3: if zero D then goto false else goto 4
+   4: if zero E then goto true else goto 5
+   5: do dec D goto 6
+   6: do dec E goto 3
+}
+
+// testa se A == B
+test igual(A,B){
+   1: do atribui(D,A) goto 2
+   2: do atribui(E,B) goto 3
+   3: if zero D then goto 7 else goto 4
+   4: if zero E then goto false else goto 5
+   5: do dec D goto 6
+   6: do dec E goto 3
+   7: if zero E then goto true else goto false
+}
+
 //soma C vezes o valor de B, armazenando em B
 //usa D, E, F
 operation multiplica(B, C){
@@ -43,7 +64,7 @@ operation multiplica(B, C){
 //divide o valor de A por B
 // Entram A (dividendo) e B (divisor)
 // Saem A (quociente) e B (resto)
-// usa E e F
+// usa I e J
 operation div(A,B){  
    1: if zero A then goto 0 else goto 2
    2: if zero B then goto 12 else goto 3
@@ -110,42 +131,8 @@ operation pair(P,A,B){
    7: do multiplica(P,G) goto 0
 }
 
-//calcula o fatorial de R e guarda em
-//H
-operation fatorial(H,R){
-   1: if zero H then goto 2 else goto 3
-   2: do inc H goto 3
-   3: if zero R then goto 0 else goto 4
-   4: do multiplica(H,R) goto 5
-   5: do dec R goto 3
-}
-
-//
-// 2.d) f(x, y) retorna o coeficiente binomial ( x )
-//                                             ( y )
-//      se y ≤ x. Se y > x, f(x, y) retorna 0. Por exemplo, f(3, 2) = 3,
-//      f(10, 3) = 120 e f(0, 4) = 0. Lembre-se de que, para quaisquer
-//      naturais x e y com y ≤ x, definimos ( x ) =    x!
-//                                          ( y )   y!(x−y)!
-
-
 main{
-//extrai as coordenadas
    1: do fst(A,X) goto 2   
-   2: do snd(B,X) goto 3
-//verifica se Y<=X, sai caso não seja
-   3: do atribui(M,A) goto 4
-   4: do atribui(N,B) goto 5
-   5: do subtrai(N,M) goto 6
-   6: if zero N then goto 7 else goto 0
-//calcula x!, y! e (x-y)!
-   7: do atribui(M,A) goto 8
-   8: do atribui(N,B) goto 9
-   9: do fatorial(Y,M) goto 10
-  10: do fatorial(H,N) goto 11
-  11: do subtrai(A,B) goto 12
-  12: do fatorial(B,A) goto 13
-// calcula o coeficiente binomial
-  13: do div(Y,B) goto 14
-  14: do div(Y,H) goto 0
+   2: do snd(Y,X) goto 3 
+   3: do div(A,Y) goto 0
 }

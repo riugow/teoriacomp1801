@@ -14,25 +14,32 @@ operation soma(A,B){
 //atribui o valor de B para A
 operation atribui(A,B){
    1: do zera(A) goto 2
-   2: if zero B then goto 6 else goto 3
-   3: do dec B goto 4
-   4: do inc C goto 5
-   5: do inc A goto 2
-   6: do soma(B,C) goto 0
+   2: do zera(C) goto 3
+   3: if zero B then goto 7 else goto 4
+   4: do dec B goto 5
+   5: do inc C goto 6
+   6: do inc A goto 3
+   7: do soma(B,C) goto 0
 }
 
-//divide o valor de A por 10
-operation div10(A){
-   1: do zera(C) goto 2
-   2: do soma(C,A) goto 3
-   3: do zera(B) goto 4
-   4: do add B 10 goto 5
-   5: if zero B then goto 9 else goto 6
-   6: if zero C then goto 0 else goto 7
-   7: do dec C goto 8
-   8: do dec B goto 5
-   9: do inc A goto 4
-}
+//divide o valor de A por B
+// Entram A (dividendo) e B (divisor)
+// Saem A (quociente) e B (resto)
+// usa E e F
+operation div(A,B){  
+   1: if zero A then goto 0 else goto 2
+   2: if zero B then goto 12 else goto 3
+   3: do zera(I) goto 4
+   4: do soma(I,A) goto 5
+   5: do atribui(J,B) goto 6
+   6: if maior(J,I) then goto 11 else goto 7
+   7: do dec I goto 8
+   8: do dec J goto 9
+   9: if zero J then goto 10 else goto 7
+  10: do inc A goto 5
+  11: do atribui(B,I) goto 0
+  12: do soma(B,A) goto 0
+} 
 
 // 1.a) f(x) retorna o número mínimo de dígitos decimais necessários para
 //      escrever x na base 10. Por exemplo, f(0) = 1, f(3) = 1, f(75) = 2 e
@@ -41,6 +48,8 @@ main{
    1: do atribui(A,X) goto 2
    2: do zera(Y) goto 3
    3: do inc Y goto 4
-   4: do div10(A) goto 5
-   5: if zero A then goto 0 else goto 3
+   4: do zera(B) goto 5
+   5: do add B 10 goto 6
+   6: do div(A,B) goto 7
+   7: if zero A then goto 0 else goto 3
 }
