@@ -70,7 +70,7 @@ let
  f4rec    =  \M l. if (isEmpty l) empty (append (M (tail l)) (cons (head l) empty)) ;
  f4       =  fix f4rec ;
  -- Constroi lista com o par de primeiros elementos juntamente com o restante da lista. Se for detectado o empty em alguma das duas listas, termina lista final com um empty também.
- f5rec    =  \M l k. if (isEmpty l) empty (if (isEmpty k) empty (cons (pair (head l) (head k)) (M (tail l) (tail k)))) ;
+ f5rec    =  \M l k. if (or (isEmpty l) (isEmpty k)) empty (cons (pair (head l) (head k)) (M (tail l) (tail k))) ;
  f5       =  fix f5rec ;
  
   -- Operacoes Aritmeticas em Codificação Padrão
