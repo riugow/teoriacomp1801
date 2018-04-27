@@ -73,7 +73,10 @@ let
  f5rec    =  \M l k. if (or (isEmpty l) (isEmpty k)) empty (cons (pair (head l) (head k)) (M (tail l) (tail k))) ;
  f5       =  fix f5rec ;
  
-  -- Operacoes Aritmeticas em Codificação Padrão
+ -- Números em Codificação Padrão
+ CP_0          = \x.x ;
+ 
+ -- Operacoes Aritmeticas em Codificação Padrão
  succCP        = \n.(pair false n) ;
  
  -- Teste de Zero em Codificação Padrão
@@ -82,9 +85,18 @@ let
  -- Funções para Pares Ordenados em Codificação Padrão
  predCP        = snd ;
 
+ -- Funções recursivas
+ repeatCP_rec   = \M n f x.if (isZeroCP n) x (f (M (predCP n) f x )) ;
+ evenCP_rec = \M b n.if (isZeroCP n) b (M (not b) (predCP n) ) ;
+ multCP_rec = \M x y.if (isZeroCP x) CP_0 (addCP y (M (predCP x) y)) ;
+ halfCP_rec = \M y x.if (or (isZeroCP x) (isZeroCP (predCP x)) ) y (M (succCP y) (predCP (predCP x)) ) ;
+ 
  -- Segunda questão do Trabalho
  -- repeatCP repete n vezes a aplicação de f em x, sendo n um número no formato Codificação Padrão
- repeatCP      = fix (\M n f x.if (isZeroCP n) x (f (M (predCP n) f x ))) ;
+ repeatCP      = fix repeatCP_rec ;
+ 
+ -- evenCP recebe um número no formato Codificação Padrão e retorna true se ele for par
+ evenCP        = fix evenCP_rec true ;
  
  -- soma dois números no formato Codificação Padrão. Aproveita a implementação da repeatCP, onde a
  -- soma consiste na aplicação da função sucessor de y, x vezes.
@@ -93,6 +105,13 @@ let
  -- CP_5          = (pair false (pair false (pair false (pair false (pair false (\x.x)))))) ;
  -- addCP CP_2 CP_5 deve retornar (pair false (pair false (pair false (pair false (pair false (pair false (pair false (\x.x))))))))
  addCP         = \x y.repeatCP x succCP y ;
+ 
+ -- multiplica dois números no formato Codificação Padrão.
+ multCP        = fix multCP_rec ;
+ 
+ -- dado um número no formato Codificação Padrão, retorna um outro número no mesmo formato que corresponde à metade
+ -- do número informado 
+ halfCP        = fix halfCP_rec CP_0 ;
 
 in
 
