@@ -1,0 +1,146 @@
+let
+
+ -- Definição de termos
+ true     =  \x y. x ;
+ false    =  \x y. y ;
+ if       =  \a b c. a b c ;
+
+ -- Numeros como 5 são convertidos
+ -- pelo simulador para os numerais de
+ -- Church correspondentes
+
+ -- Operacoes Booleanas
+ not      =  \a. a false true ;
+ and      =  \a b. a b false ;
+ or       =  \a b. a true b ;
+ xor      =  \a b. a (not b) b ;
+ nand     =  \a b. not (and a b) ;
+ implies  =  \a b. or (not a) b ;
+ -- Implication elimination (a -> b) = (¬a \/ b)
+ iff      =  \a b. and (implies a b) (implies b a) ;
+ -- Bidirectional elimination (a <-> b) = (a -> b) /\ (b -> a)
+
+ -- Operacoes Aritmeticas
+ succ     =  \n p q. p (n p q) ;
+ add      =  \m n p q. m p (n p q) ;
+ mult     =  \m n p q. m (n p) q ;
+
+ -- Teste de Zero
+ isZero   =  \n. n (\x. false) true ;
+
+ -- Pares Ordenados
+ pair     =  \m n b. b m n ;
+ fst      =  \p. p true ;
+ snd      =  \p. p false ;
+ ShiftInc =  \p. pair (snd p) (succ (snd p)) ;
+ pred     =  \n. fst (n ShiftInc (pair 0 0)) ;
+
+ -- Listas
+ empty    =  \x. true ;
+ cons     =  \h t. pair h t ;
+ isEmpty  =  \l. l (\x y. false) ;
+ head     =  fst ;
+ tail     =  snd ;
+
+ -- Combinador de Ponto Fixo
+ fix      =  \f. (\x. f (x x)) (\x. f (x x)) ;
+ 
+ -- Funções de Alta Ordem
+ map_rec      = \M f l.if (isEmpty l) empty cons (f (head l)) (M f(tail l)) ;
+ filter_rec   = \M p l.if (isEmpty l) empty (if (p (head l)) (cons (head l) (M (tail l))) (M (tail l))) ;
+ fold_rec     = \M op init l.if (isEmpty l) init (op (head l) (M op init (tail l))) ;
+ 
+ map      = fix map_rec ;
+ filter   = fix filter_rec ;
+ fold     = fix fold_rec ;
+
+
+ 
+ -- Números em Codificação Padrão
+ CP_0          = \x.x ;
+ 
+ -- Operacoes Aritmeticas em Codificação Padrão
+ succCP        = \n.(pair false n) ;
+ 
+ -- Teste de Zero em Codificação Padrão
+ isZeroCP      = fst ;
+
+ -- Funções para Pares Ordenados em Codificação Padrão
+ predCP        = snd ;
+
+ -- Funções recursivas:
+ -- OBS: Algumas funções recursivas aparecem junto com o seu fix nas linhas posteriores pelo motivo do simulador
+ -- 	 não executar normalmente funções que fazem chamadas a outras que estão nas linhas posteriores do código.
+ 
+ -- 1) d)
+ appendrec =  \M l k. if (isEmpty l) k (cons (head l) (M (tail l) k)) ;
+ append   =  fix appendrec ;
+ f4rec    =  \M l. if (isEmpty l) empty (append (M (tail l)) (cons (head l) empty)) ;
+ -- 1) e)
+ f5_rec    =  \M l k. if (or (isEmpty l) (isEmpty k)) empty (cons (pair (head l) (head k)) (M (tail l) (tail k))) ;
+ 
+ -- 2) a)
+ repeatCP_rec   = \M n f x.if (isZeroCP n) x (f (M (predCP n) f x )) ;
+ 
+ -- 2) b)
+ evenCP_rec = \M b n.if (isZeroCP n) b (M (not b) (predCP n) ) ;
+ 
+ -- 2) e)
+ halfCP_rec = \M y x.if (or (isZeroCP x) (isZeroCP (predCP x)) ) y (M (succCP y) (predCP (predCP x)) ) ;
+ 
+ 
+ 
+ -- Implementação do trabalho:
+  
+  
+ -- Primeira questão (Operacoes com numerais de Church):
+ 
+ -- a)
+ -- Operacao de multiplicacao e soma simples.
+ f1       =  \x y. add (mult 2 x) y ;
+ 
+ -- b)
+ -- recria o par colocando o antigo 2° elemento em 1° e vice-versa.
+ f2       =  \p. pair (snd p) (fst p) ;
+ 
+ -- c)
+ -- Soma os elementos da lista entre si, interpretando o elemento 'empty' como 0.
+ f3       = \l. (fold add 0 l) ;
+ 
+ -- d)
+ -- É necessário realizar um append do resto da lista original com o seu primeiro elemento, seguido do empty para inverter a lista dada para a funcao.
+ f4       =  fix f4rec ;
+ 
+ -- e)
+ -- Constroi lista com o par de primeiros elementos juntamente com o restante da lista. Se for detectado o empty em alguma das duas listas, termina lista final com um empty também.
+ f5       =  fix f5_rec ;
+ 
+ 
+ -- Segunda questão (Codificação padrão):
+ 
+ -- a)
+ -- repeatCP repete n vezes a aplicação de f em x, sendo n um número no formato Codificação Padrão
+ repeatCP      = fix repeatCP_rec ;
+ 
+ -- b)
+ -- evenCP recebe um número no formato Codificação Padrão e retorna true se ele for par
+ evenCP        = fix evenCP_rec true ;
+ 
+ -- c)
+ -- soma dois números no formato Codificação Padrão. Aproveita a implementação da repeatCP, onde a
+ -- soma consiste na aplicação da função sucessor de y, x vezes.
+ -- exemplo: 
+ -- CP_2          = (pair false (pair false (\x.x))) ;
+ -- CP_5          = (pair false (pair false (pair false (pair false (pair false (\x.x)))))) ;
+ -- addCP CP_2 CP_5 deve retornar (pair false (pair false (pair false (pair false (pair false (pair false (pair false (\x.x))))))))
+ addCP         = \x y.repeatCP x succCP y ;
+ 
+ -- d)
+ -- multiplica dois números no formato Codificação Padrão.
+ multCP_rec = \M x y.if (isZeroCP x) CP_0 (addCP y (M (predCP x) y)) ;
+ multCP        = fix multCP_rec ;
+ 
+ -- e)
+ -- dado um número no formato Codificação Padrão, retorna um outro número no mesmo formato que corresponde à metade
+ -- do número informado 
+ halfCP        = fix halfCP_rec CP_0 ;
