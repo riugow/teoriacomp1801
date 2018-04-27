@@ -48,7 +48,7 @@ let
  -- Funções de Alta Ordem
  map_rec      = \M f l.if (isEmpty l) empty cons (f (head l)) (M f(tail l)) ;
  filter_rec   = \M p l.if (isEmpty l) empty (if (p (head l)) (cons (head l) (M (tail l))) (M (tail l))) ;
- fold_rec     = \M op init l.if (isEmpty l) init op (head l) (M op init (tail l)) ;
+ fold_rec     = \M op init l.if (isEmpty l) init (op (head l) (M op init (tail l)) );
  
  map      = fix map_rec ;
  filter   = fix filter_rec ;
