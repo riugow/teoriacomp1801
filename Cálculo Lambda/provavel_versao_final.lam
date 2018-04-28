@@ -73,9 +73,11 @@ let
  -- 	 não executar normalmente funções que fazem chamadas a outras que estão nas linhas posteriores do código.
  
  -- 1) d)
- appendrec =  \M l k. if (isEmpty l) k (cons (head l) (M (tail l) k)) ;
- append   =  fix appendrec ;
- f4rec    =  \M l. if (isEmpty l) empty (append (M (tail l)) (cons (head l) empty)) ;
+ reverse_rec  = \M r l.if (isEmpty l) r (M (cons (head l) r) (tail l) ) ;
+ -- para a reversão da lista, criamos uma nova no sentido inverso da primeira. Na chamada de função abaixo, a
+ -- nova lista começa vazia.
+ reverse   =  fix reverse_rec empty;
+ 
  -- 1) e)
  f5_rec    =  \M l k. if (or (isEmpty l) (isEmpty k)) empty (cons (pair (head l) (head k)) (M (tail l) (tail k))) ;
  
@@ -108,8 +110,8 @@ let
  f3       = \l. (fold add 0 l) ;
  
  -- d)
- -- É necessário realizar um append do resto da lista original com o seu primeiro elemento, seguido do empty para inverter a lista dada para a funcao.
- f4       =  fix f4rec ;
+ -- Dada uma lista, devolve uma nova lista contendo os mesmos elementos da lista dada, porém na ordem reversa.
+ f4       =  \l.reverse l ;
  
  -- e)
  -- Constroi lista com o par de primeiros elementos juntamente com o restante da lista. Se for detectado o empty em alguma das duas listas, termina lista final com um empty também.
